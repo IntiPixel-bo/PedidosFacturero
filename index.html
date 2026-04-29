@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos Tarjetas ENTEL Bolivia</title>
+
+<style>
+:root{
+    --celeste:#3fa9f5;
+    --celeste-suave:#d9eefc;
+    --negro:#000;
+    --blanco:#fff;
+}
+
+body{
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:#eef6fc;
+    padding:10px;
+}
+
+.container{
+    background:var(--blanco);
+    max-width:500px;
+    margin:auto;
+    padding:15px;
+    border-radius:8px;
+    border:2px solid var(--celeste);
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+h2{
+    text-align:center;
+    color:#0077c8;
+    font-size:17px;
+}
+
+h3{
+    color:#0077c8;
+    font-size:14px;
+    margin-top:12px;
+    border-bottom:1px solid var(--celeste);
+}
+
+/* FORMULARIO COMPACTO */
+.form-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.form-group{
+    flex:1;
+}
+
+.form-group label{
+    font-size:12px;
+    font-weight:bold;
+    display:block;
+    margin-bottom:2px;
+}
+
+.form-group input{
+    width:95%;
+    padding:5px;
+    font-size:12px;
+    border:1px solid var(--negro);
+    border-radius:4px;
+}
+
+/* TABLA */
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:12.5px;
+}
+
+.table th,.table td{
+    border:1px solid var(--negro);
+    padding:4px;
+    text-align:center;
+}
+
+.table th{
+    background:var(--celeste-suave);
+}
+
+/* INPUT CANTIDAD COMPACTO */
+.table input{
+    width:70px;
+    padding:3px;
+    font-size:12px;
+    text-align:center;
+}
+
+/* SELECTS */
+select{
+    width:100%;
+    padding:4px;
+    font-size:12px;
+}
+
+/* BOTONES */
+.buttons{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+}
+
+button{
+    flex:1;
+    padding:7px;
+    font-size:12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.calcular{ background:#0077c8; color:#fff; }
+.limpiar{ background:#999; color:#fff; }
+.whatsapp{ background:#25D366; color:#fff; }
+
+pre{
+    background:#f9fbfd;
+    padding:8px;
+    border:1px solid var(--negro);
+    border-radius:7px;
+    font-size:12px;
+}
+
+/* SWITCH */
+.switch-container{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:6px;
+    font-size:12px;
+}
+
+.switch{
+    position:relative;
+    width:38px;
+    height:20px;
+}
+
+.switch input{
+    opacity:0;
+}
+
+.slider{
+    position:absolute;
+    background:#ccc;
+    border-radius:20px;
+    top:0; left:0; right:0; bottom:0;
+}
+
+.slider:before{
+    content:"";
+    position:absolute;
+    height:14px;
+    width:14px;
+    left:3px;
+    bottom:3px;
+    background:#fff;
+    border-radius:50%;
+    transition:.3s;
+}
+
+input:checked + .slider{
+    background:#28a745;
+}
+
+input:checked + .slider:before{
+    transform:translateX(18px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Formulario de Pedido ENTEL</h2>
+
+<!-- NUEVO FORMATO -->
+<div class="form-row">
+    <div class="form-group">
+        <label>Nombre del Mayorista</label>
+        <input id="nombre">
+    </div>
+    <div class="form-group">
+        <label>NIT</label>
+        <input id="nit">
+    </div>
+</div>
+
+<h3>Cantidades</h3>
+<table class="table">
+<tr><th>Tarjeta</th><th>Cantidad</th></tr>
+<tr><td>10 Bs</td><td><input type="number" id="q10" maxlength="7"></td></tr>
+<tr><td>15 Bs</td><td><input type="number" id="q15"></td></tr>
+<tr><td>30 Bs</td><td><input type="number" id="q30"></td></tr>
+<tr><td>50 Bs</td><td><input type="number" id="q50"></td></tr>
+<tr><td>100 Bs</td><td><input type="number" id="q100"></td></tr>
+</table>
+
+<h3>Diferencial</h3>
+
+<table class="table">
+<tr><th>Tipo</th><th>Multiplicador</th></tr>
+
+<tr>
+<td>TH 10</td>
+<td>
+<select id="dif10">
+<option value="0">No aplicar</option>
+<option value="0.005">1/2 pt</option>
+<option value="0.01">1 pt</option>
+<option value="0.02">2 pt</option>
+<option value="0.03">3 pt</option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Cortes</td>
+<td>
+<select id="difCortes">
+<option value="0">No aplicar</option>
+<option value="0.10">0.10</option>
+<option value="0.20">0.20</option>
+<option value="0.30">0.30</option>
+</select>
+</td>
+</tr>
+</table>
+
+<div>
+<strong>Total Diferencial: </strong>
+<span id="totalDif">0.00 Bs</span>
+
+<div class="switch-container">
+    <label class="switch">
+        <input type="checkbox" id="toggleDif" onchange="toggleDiferencial()">
+        <span class="slider"></span>
+    </label>
+    <span id="estadoDif">No incluido</span>
+</div>
+</div>
+
+<div class="buttons">
+<button class="calcular" onclick="calcular()">Calcular</button>
+<button class="limpiar" onclick="limpiar()">Limpiar</button>
+<button class="whatsapp" onclick="enviarWhatsApp()">WhatsApp</button>
+</div>
+
+<h3>Resumen</h3>
+<div id="resultado"></div>
+
+</div>
+
+<script>
+const tarjetas={
+10:{corte:10,comision:0.083},
+15:{corte:15,comision:0.09},
+30:{corte:30,comision:0.104},
+50:{corte:50,comision:0.1044},
+100:{corte:100,comision:0.1044}
+};
+
+let incluirDif=false;
+let mensajeFinal="";
+
+function formato(n){
+return n.toLocaleString("es-BO",{minimumFractionDigits:2});
+}
+
+function calcular(){
+
+let cantidades={
+10:parseInt(q10.value)||0,
+15:parseInt(q15.value)||0,
+30:parseInt(q30.value)||0,
+50:parseInt(q50.value)||0,
+100:parseInt(q100.value)||0
+};
+
+let total=0, comision=0, cancelar=0;
+let detalle="";
+let totalDif=0;
+
+let m10=parseFloat(dif10.value)||0;
+let mC=parseFloat(difCortes.value)||0;
+
+for(let t in cantidades){
+let c=cantidades[t];
+if(c>0){
+let monto=c*tarjetas[t].corte;
+let com=monto*tarjetas[t].comision;
+let pag=monto-com;
+
+total+=monto;
+comision+=com;
+cancelar+=pag;
+
+detalle+=`. TH ${t} Bs - ${c} u. → A cancelar: ${formato(pag)} Bs\n`;
+
+if(t==10){ totalDif+=c*m10; }
+else{ totalDif+=c*mC; }
+}
+}
+
+totalDifEl = document.getElementById("totalDif");
+totalDifEl.innerText=formato(totalDif)+" Bs";
+
+if(incluirDif && totalDif>0){
+cancelar+=totalDif;
+
+}
+
+let lineaDiferencial = "";
+
+if(incluirDif && totalDif > 0){
+    lineaDiferencial = `Diferencial aplicado: ${formato(totalDif)} Bs\n`;
+}
+
+mensajeFinal=`Pedido de ${nombre.value}
+NIT: ${nit.value}
+
+${detalle}
+-----------------------------
+Total Bs.: ${formato(total)} Bs
+Comisión total: ${formato(comision)} Bs
+${lineaDiferencial}Total a cancelar: ${formato(cancelar)} Bs`;
+
+resultado.innerHTML=`<pre>${mensajeFinal}</pre>`;
+}
+
+function toggleDiferencial(){
+incluirDif=document.getElementById("toggleDif").checked;
+document.getElementById("estadoDif").innerText=
+incluirDif?"Incluido":"No incluido";
+calcular();
+}
+
+function limpiar(){
+location.reload();
+}
+
+function enviarWhatsApp(){
+if(!mensajeFinal){ alert("Primero calcule"); return; }
+window.open(`https://wa.me/?text=${encodeURIComponent(mensajeFinal)}`);
+}
+</script>
+
+</body>
+</html>
