@@ -325,6 +325,11 @@ if(incluirDif && totalDif > 0){
     lineaDiferencial = `Diferencial aplicado: ${formato(totalDif)} Bs\n`;
 }
 
+let totalCancelar = cancelar;
+if(incluirDif && totalDif > 0){
+    totalCancelar -= totalDif;
+}
+
 mensajeFinal=`Pedido de ${nombre.value}
 NIT: ${nit.value}
 
@@ -332,7 +337,8 @@ ${detalle}
 -----------------------------
 Total Bs.: ${formato(total)} Bs
 Comisión total: ${formato(comision)} Bs
-${lineaDiferencial}Total a cancelar: ${formato(cancelar)} Bs`;
+Total a cancelar: ${formato(totalCancelar)} Bs
+${lineaDiferencial}Total más diferencial: ${formato(cancelar)} Bs`;
 
 resultado.innerHTML=`<pre>${mensajeFinal}</pre>`;
 }
