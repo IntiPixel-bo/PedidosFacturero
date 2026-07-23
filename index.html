@@ -183,6 +183,12 @@ input:checked + .slider:before{
 
 <h2>Formulario de Pedido ENTEL</h2>
 
+<div style="text-align:center;margin-bottom:10px;">
+    <a href="ventas.html" style="display:inline-block;background:#28a745;color:#fff;padding:8px 18px;border-radius:20px;text-decoration:none;font-size:13px;font-weight:bold;box-shadow:0 2px 4px rgba(0,0,0,.15);transition:.2s;">
+        🛒 Ir al Módulo de Ventas
+    </a>
+</div>
+
 <!-- NUEVO FORMATO -->
 <div class="form-row">
     <div class="form-group">
@@ -319,15 +325,17 @@ cancelar+=totalDif;
 
 }
 
-let lineaDiferencial = "";
 
+
+let totalBase = cancelar;
 if(incluirDif && totalDif > 0){
-    lineaDiferencial = `Diferencial aplicado: ${formato(totalDif)} Bs\n`;
+    totalBase -= totalDif;
 }
 
-let totalCancelar = cancelar;
+let lineasDiferencial = "";
 if(incluirDif && totalDif > 0){
-    totalCancelar -= totalDif;
+    lineasDiferencial = `Diferencial aplicado: ${formato(totalDif)} Bs
+Total más diferencial: ${formato(cancelar)} Bs`;
 }
 
 mensajeFinal=`Pedido de ${nombre.value}
@@ -337,8 +345,8 @@ ${detalle}
 -----------------------------
 Total Bs.: ${formato(total)} Bs
 Comisión total: ${formato(comision)} Bs
-Total a cancelar: ${formato(totalCancelar)} Bs
-${lineaDiferencial}Total más diferencial: ${formato(cancelar)} Bs`;
+Total a cancelar: ${formato(totalBase)} Bs
+${lineasDiferencial}`;
 
 resultado.innerHTML=`<pre>${mensajeFinal}</pre>`;
 }
